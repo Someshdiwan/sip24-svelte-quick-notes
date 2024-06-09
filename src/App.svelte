@@ -17,17 +17,18 @@
   });
 
   function saveNote() {
-    const storedPageName = pages[currentPageIndex];
-    if (storedPageName !== title) {
-      localStorage.removeItem(storedPageName);
-      pages[currentPageIndex] = title;
+    if (title.trim() === '') {
+      alert('Title cannot be empty.');
+      return;
     }
+    pages[currentPageIndex] = title;
     localStorage.setItem(title, note);
     localStorage.setItem("pages", JSON.stringify(pages));
   }
 
   function addPage() {
-    pages.push("Note Title");
+    const newTitle = `Note ${pages.length + 1}`;
+    pages.push(newTitle);
     selectPage(pages.length - 1); // Select the newly added page
   }
 
@@ -51,10 +52,16 @@
   }
 
   function updatePageTitle(index, newTitle) {
+    const oldTitle = pages[index];
+    if (newTitle.trim() === '') {
+      newTitle = `Note ${index + 1}`;
+    }
     pages[index] = newTitle;
     if (index === currentPageIndex) {
       title = newTitle;
     }
+    localStorage.setItem(newTitle, localStorage.getItem(oldTitle) || '');
+    localStorage.removeItem(oldTitle);
     localStorage.setItem("pages", JSON.stringify(pages));
   }
 </script>
@@ -85,7 +92,7 @@
 
 <main class="p-4 ml-60 h-auto">
   <div class="grid grid-cols-2 items-center mb-3">
-    <h1 class="text-3xl font-bold w-full h-10 leading-10" contenteditable on:blur={(e) => title = e.target.textContent}>
+    <h1 class="text-3xl font-bold w-full h-10 leading-10" contenteditable on:blur={(e) => updatePageTitle(currentPageIndex, e.target.textContent)}>
       {title || "Note Title"}
     </h1>
     <div class="flex justify-end">
@@ -102,17 +109,8 @@
     background: #fbfbfb;
   }
 
-  .bg-dark-gray {
-    background: #efefef;
-  }
-
   .contenteditable {
     outline: none;
-  }
-
-  .placeholder-title::before {
-    content: attr(placeholder);
-    color: #aaa;
   }
 
   textarea {
