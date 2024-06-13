@@ -1,7 +1,6 @@
 <script>
   import { onMount } from "svelte";
   import { openDB } from 'idb';
-  
 
   let title = '';
   let note = '';
@@ -24,7 +23,7 @@
 
     const savedPages = await db.getAll('pages');
     if (savedPages.length) {
-      pages = savedPages.map(page => page.title);
+      pages = savedPages.sort((a, b) => a.id - b.id).map(page => page.title);
       title = pages[currentPage];
       note = await db.get('notes', title) || '';
     } else {
@@ -49,12 +48,14 @@
       setTimeout(() => message = '', 3000);
     } catch (error) {
       message = 'Error saving note';
+      console.error(error);
+      setTimeout(() => message = '', 3000);
     }
   }
 
   async function addPage() {
     try {
-      const newPage = { id: pages.length + 1, title: "New Page" };
+      const newPage = { id: Date.now(), title: "New Page" }; // Use timestamp for unique ID
       await db.add('pages', newPage);
       pages.push(newPage.title);
       currentPage = pages.length - 1;
@@ -64,6 +65,8 @@
       setTimeout(() => message = '', 3000);
     } catch (error) {
       message = 'Error adding page';
+      console.error(error);
+      setTimeout(() => message = '', 3000);
     }
   }
 
@@ -76,6 +79,8 @@
       setTimeout(() => message = '', 3000);
     } catch (error) {
       message = 'Error selecting page';
+      console.error(error);
+      setTimeout(() => message = '', 3000);
     }
   }
 
@@ -85,8 +90,10 @@
       pages.splice(index, 1);
       await db.delete('notes', pageTitle);
       const allPages = await db.getAll('pages');
-      const pageId = allPages.find(page => page.title === pageTitle).id;
-      await db.delete('pages', pageId);
+      const page = allPages.find(page => page.title === pageTitle);
+      if (page) {
+        await db.delete('pages', page.id);
+      }
 
       if (currentPage >= pages.length) {
         currentPage = pages.length - 1;
@@ -100,6 +107,8 @@
       setTimeout(() => message = '', 3000);
     } catch (error) {
       message = 'Error deleting page';
+      console.error(error);
+      setTimeout(() => message = '', 3000);
     }
   }
 
@@ -125,12 +134,15 @@
       const responseLocation = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
       const locationData = await responseLocation.json();
       currentLocation = locationData.display_name;
+
       const responseTime = await fetch(`https://worldtimeapi.org/api/timezone/Etc/GMT`);
       const timeData = await responseTime.json();
       currentTime = new Date(timeData.utc_datetime).toLocaleTimeString();
+
       locationAndTime = `Location: ${currentLocation}, Time: ${currentTime}`;
     } catch (error) {
       locationAndTime = 'Error fetching location and time';
+      console.error(error);
     }
     setTimeout(getLocationAndTime, 1000);
   }
@@ -146,30 +158,6 @@
       animatedBackground.classList.remove('animated-background');
     }
   }
-
-  async function setReminder() {
-    try {
-      const response = await fetch('http://localhost:5000/send-reminder', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          to: 'recipient-email@example.com',
-          subject: 'Reminder',
-          text: 'This is a reminder message from your Svelte app.',
-        }),
-      });
-
-      const result = await response.json();
-      message = result.message;
-      setTimeout(() => message = '', 3000);
-    } catch (error) {
-      message = 'Error sending reminder';
-      setTimeout(() => message = '', 3000);
-    }
-  }
-
 </script>
 
 <aside class="sidebar">
@@ -203,7 +191,6 @@
       </button>
     </div>
   </div>
-
 </aside>
 
 <main class="main-content">
