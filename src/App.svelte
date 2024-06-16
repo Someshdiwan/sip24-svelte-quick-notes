@@ -242,104 +242,104 @@
 </main>
 
 <style>
-  :global(.dark) {
-    --tw-bg-opacity: 1;
-    background-color: rgba(31, 41, 55, var(--tw-bg-opacity)); /* Tailwind's bg-gray-800 */
-    color: rgba(209, 213, 219, var(--tw-text-opacity)); /* Tailwind's text-gray-200 */
-  }
+/* Global Dark Mode */
+:global(.dark) {
+  --tw-bg-opacity: 1;
+  background-color: rgba(31, 41, 55, var(--tw-bg-opacity)); /* Tailwind's bg-gray-800 */
+  color: rgba(209, 213, 219, var(--tw-text-opacity)); /* Tailwind's text-gray-200 */
+}
 
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 256px;
+  height: 100%;
+  background-color: #2d3748; /* Tailwind's bg-gray-800 */
+  z-index: 50;
+  padding: 20px;
+  overflow-y: auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Main Content Styles */
+.main-content {
+  margin-left: 256px;
+  padding: 20px;
+  min-height: 100vh;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* Adjustments for Mobile */
+@media (max-width: 640px) {
   .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 256px;
-    height: 100%;
-    background-color: #2d3748; /* Tailwind's bg-gray-800 */
-    z-index: 50;
-    padding: 20px;
-    overflow-y: auto;
-    transition: transform 0.3s ease-in-out;
-  }
-
-  .main-content {
-    margin-left: 256px;
-    padding: 20px;
-    min-height: 100vh;
-    transition: margin-left 0.3s ease-in-out;
-  }
-
-  @media (max-width: 640px) {
-    .sidebar {
-      width: 100%;
-      height: auto;
-      position: fixed;
-      top: 0;
-      left: 0;
-    }
-
-    .main-content {
-      margin-left: 0;
-      padding-top: 80px; /* Adjust padding to avoid overlap */
-    }
-  }
-
-  textarea {
-    min-height: 200px;
-  }
-
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 256px;
-    height: 100%;
-    background-color: #2d3748; /* Tailwind's bg-gray-800 */
-    z-index: 50;
-    padding: 20px;
-    overflow-y: auto;
-    transition: transform 0.3s ease-in-out;
-  }
-
-  /* Animated background */
-  .animated-background {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    background: linear-gradient(to right, #BF5AF2, #FF9500, #FF2D55, #5856D6);
-    background-size: 400% 100%;
-    animation: gradientAnimation 10s ease infinite;
-    z-index: -1; /* Ensure it's behind other content */
+    position: static; /* Change from fixed to static */
+    height: auto;
+    padding-bottom: 20px; /* Add padding at bottom to separate from main content */
   }
+  .main-content {
+    margin-left: 0;
+    padding: 20px 20px 80px; /* Adjust padding to avoid overlap and provide space at bottom */
+  }
+}
 
-  @keyframes gradientAnimation {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
+/* Textarea Styles */
+textarea {
+  min-height: 200px;
+}
 
-  /* Toggle Button Style */
-  .toggle-button {
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: 500;
-    color: white;
-    background-color: #FF3B30; /* Red color when animation is on */
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-  }
+/* Animated Background */
+.animated-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, #ff7675, #fab1a0, #ff6b81, #fd79a8); /* Different colors for animation */
+  background-size: 400% 100%;
+  animation: gradientAnimation 10s ease infinite;
+  z-index: -1; /* Ensure it's behind other content */
+}
 
-  .toggle-button:hover {
-    background-color: #FF453A; /* Darker red color on hover */
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
   }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Toggle Button Styles */
+.toggle-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  background-color: #6ab04c; /* Green color for toggle button */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.toggle-button:hover {
+  background-color: #38a169; /* Darker green color on hover */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+  .main-content {
+    margin-left: 0;
+    padding: 20px; /* Adjust padding for better spacing */
+    min-height: 100vh; /* Ensure content covers the full viewport height */
+  }
+}
+
 
 </style>
