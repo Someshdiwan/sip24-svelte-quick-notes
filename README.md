@@ -17,7 +17,7 @@ To run this project locally, follow these steps:
 1. Clone the repository to your local machine:
 
 
-5. Open your browser and go to https://quick-note-by-someshdiwan.vercel.app/ to view the app.
+5. Open your browser and go to (https://quick-notes-type.vercel.app/) to view the app.
 
 ## Usage
 
